@@ -53,7 +53,7 @@ def reason_predictive_block(reason_features):
     """Keep only reasoner evidence used by the final predictor.
 
     The diagnostic uncertainty columns are intentionally excluded here. They are
-    saved and evaluated separately by script/05_validate_reasoning_uncertainty.py.
+    saved and evaluated separately by src/validate_reasoning_uncertainty.py.
     """
     return np.column_stack(
         [

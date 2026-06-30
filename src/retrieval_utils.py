@@ -19,7 +19,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-BASE = PROJECT_ROOT / "output" / "features" / "embedding_rag_features.npz"
+BASE = PROJECT_ROOT / "output" / "features" / "embedding_rac_features.npz"
 SIGNALS = PROJECT_ROOT / "output" / "signals" / "predictive_oof_signals.npz"
 OUT_DIR = PROJECT_ROOT / "ckpt" / "retrieval"
 OUT_DIR.mkdir(exist_ok=True)

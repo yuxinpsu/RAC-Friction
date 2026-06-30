@@ -351,7 +351,7 @@ def main():
     test_analog, _ = make_analog_features(test_emb, train_emb, y_train, z_train, query_is_train=False)
 
     np.savez_compressed(
-        OUT / "embedding_rag_features.npz",
+        OUT / "embedding_rac_features.npz",
         x_train=x_train,
         x_test=x_test,
         train_analog=train_analog,
@@ -363,7 +363,7 @@ def main():
     )
     with open(OUT / "backbone_history.json", "w", encoding="utf-8") as f:
         json.dump(history, f, indent=2)
-    print("saved", OUT / "embedding_rag_features.npz", flush=True)
+    print("saved", OUT / "embedding_rac_features.npz", flush=True)
 
 
 if __name__ == "__main__":

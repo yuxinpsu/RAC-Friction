@@ -13,7 +13,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src import retrieval_utils as sem
 
-BASE = PROJECT_ROOT / "output" / "features" / "embedding_rag_features.npz"
+BASE = PROJECT_ROOT / "output" / "features" / "embedding_rac_features.npz"
 ENCODER_DIR = PROJECT_ROOT / "ckpt" / "encoder"
 RETRIEVAL_DIR = PROJECT_ROOT / "ckpt" / "retrieval"
 METRIC_DIR = PROJECT_ROOT / "output" / "metrics"

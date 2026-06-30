@@ -1,1 +1,1 @@
-"""RAG-Friction model package."""
+"""RAC-Friction model package."""

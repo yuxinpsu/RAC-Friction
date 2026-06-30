@@ -15,7 +15,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from src import contextual_reasoner as ctx_mod
 from src import reasoning_core as base_mod
 
-BASE = PROJECT_ROOT / "output" / "features" / "embedding_rag_features.npz"
+BASE = PROJECT_ROOT / "output" / "features" / "embedding_rac_features.npz"
 EMB = PROJECT_ROOT / "ckpt" / "encoder" / "contrastive64_embeddings.npz"
 RETRIEVAL_DIR = PROJECT_ROOT / "ckpt" / "retrieval"
 REASONER_DIR = PROJECT_ROOT / "ckpt" / "reasoner"

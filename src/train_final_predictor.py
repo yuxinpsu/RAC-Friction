@@ -15,7 +15,7 @@ from sklearn.metrics import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-BASE = PROJECT_ROOT / "output" / "features" / "embedding_rag_features.npz"
+BASE = PROJECT_ROOT / "output" / "features" / "embedding_rac_features.npz"
 SIGNALS = PROJECT_ROOT / "output" / "signals" / "predictive_oof_signals.npz"
 ANALOG = PROJECT_ROOT / "ckpt" / "retrieval" / "cross_encoder_reranked_analog.npz"
 REASON = PROJECT_ROOT / "ckpt" / "reasoner" / "reasoned_memory_features_rerank_contextual.npz"
@@ -226,7 +226,7 @@ def fit_reg(name, x_tr, y_tr, x_te, y_te, loss, save_path):
 
 
 def fit_cls(x_tr, z_tr, x_te, z_te, save_path):
-    print("\n--- classification: RAG-Friction ---", flush=True)
+    print("\n--- classification: RAC-Friction ---", flush=True)
     counts = np.bincount(z_tr, minlength=10).astype(float)
     weights = 1.0 / np.sqrt(np.maximum(counts, 1.0))
     weights = (weights / weights.mean()).tolist()
@@ -287,29 +287,29 @@ def main():
     print(json.dumps(results, indent=2), flush=True)
 
     results["rmse_final"], pred_rmse = fit_reg(
-        "RAG-Friction",
+        "RAC-Friction",
         x_tr,
         y_tr,
         x_te,
         y_te,
         "RMSE",
-        FINAL_DIR / "rag_friction_rerank_contextual_rmse_regressor.cbm",
+        FINAL_DIR / "rac_friction_rerank_contextual_rmse_regressor.cbm",
     )
     results["mae_final"], pred_mae = fit_reg(
-        "RAG-Friction",
+        "RAC-Friction",
         x_tr,
         y_tr,
         x_te,
         y_te,
         "MAE",
-        FINAL_DIR / "rag_friction_rerank_contextual_mae_regressor.cbm",
+        FINAL_DIR / "rac_friction_rerank_contextual_mae_regressor.cbm",
     )
     results["classification_final"], pred_cls, proba_cls = fit_cls(
         x_tr,
         z_tr,
         x_te,
         z_te,
-        FINAL_DIR / "rag_friction_rerank_contextual_classifier.cbm",
+        FINAL_DIR / "rac_friction_rerank_contextual_classifier.cbm",
     )
 
     np.savez_compressed(
@@ -330,7 +330,7 @@ def main():
     )
 
     OUT.write_text(json.dumps(results, indent=2), encoding="utf-8")
-    print("\n=== RAG_FRICTION_RESULTS ===", flush=True)
+    print("\n=== RAC_FRICTION_RESULTS ===", flush=True)
     print(json.dumps(results, indent=2), flush=True)
 
 

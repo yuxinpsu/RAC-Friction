@@ -29,16 +29,14 @@ Individual stages can also be run with `--stage prepare`, `--stage retrieval`, `
 
 The main RAC-Friction pipeline produces:
 
-- `output/features/embedding_rag_features.npz`
+- `output/features/embedding_rac_features.npz`
 - `ckpt/encoder/contrastive64_embeddings.npz`
 - `ckpt/retrieval/raw_plus_contrastive64_c65536_analog.npz`
 - `ckpt/retrieval/cross_encoder_reranked_analog.npz`
 - `ckpt/reasoner/contextual_reasoner_heteroscedastic.pt`
 - `ckpt/reasoner/reasoned_memory_features_rerank_contextual.npz`
-- `ckpt/final/rag_friction_rerank_contextual_rmse_regressor.cbm`
-- `ckpt/final/rag_friction_rerank_contextual_classifier.cbm`
-
-The historical `rag_friction_*` filenames are retained for compatibility with the current scripts, but they correspond to the RAC-Friction model described in the paper.
+- `ckpt/final/rac_friction_rerank_contextual_rmse_regressor.cbm`
+- `ckpt/final/rac_friction_rerank_contextual_classifier.cbm`
 
 ## Validation and Paper Metrics
 

@@ -6,15 +6,15 @@ This file records the major generated artifacts used by the paper. Paths are rel
 
 | Artifact | Purpose |
 |---|---|
-| `output/features/embedding_rag_features.npz` | Processed train/test features and labels. |
+| `output/features/embedding_rac_features.npz` | Processed train/test features and labels. |
 | `ckpt/encoder/contrastive64_embeddings.npz` | Learned road-weather-material embeddings. |
 | `ckpt/retrieval/raw_plus_contrastive64_c65536_analog.npz` | Hybrid retrieval analog features. |
 | `ckpt/retrieval/cross_encoder_reranked_analog.npz` | Reranked analog features. |
 | `ckpt/reasoner/cross_encoder_reranker.pt` | Cross-encoder reranking checkpoint. |
 | `ckpt/reasoner/contextual_reasoner_heteroscedastic.pt` | Contextual analog correction checkpoint. |
 | `ckpt/reasoner/reasoned_memory_features_rerank_contextual.npz` | Reasoned analog context features. |
-| `ckpt/final/rag_friction_rerank_contextual_rmse_regressor.cbm` | Final continuous-friction prediction head. |
-| `ckpt/final/rag_friction_rerank_contextual_classifier.cbm` | Final friction-risk classification head. |
+| `ckpt/final/rac_friction_rerank_contextual_rmse_regressor.cbm` | Final continuous-friction prediction head. |
+| `ckpt/final/rac_friction_rerank_contextual_classifier.cbm` | Final friction-risk classification head. |
 
 ## Main Result Files
 

@@ -11,7 +11,7 @@ from src import reasoning_core as base_mod
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-BASE = PROJECT_ROOT / "output" / "features" / "embedding_rag_features.npz"
+BASE = PROJECT_ROOT / "output" / "features" / "embedding_rac_features.npz"
 EMB = PROJECT_ROOT / "ckpt" / "encoder" / "contrastive64_embeddings.npz"
 REASONER_DIR = PROJECT_ROOT / "ckpt" / "reasoner"
 METRIC_DIR = PROJECT_ROOT / "output" / "metrics"

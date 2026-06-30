@@ -54,6 +54,8 @@ This stage evaluates the held-out test set and saves the main results to:
 output/metrics/rerank_contextual_results.json
 ```
 
+If `output/signals/predictive_oof_signals.npz` is not present, the `predictor` stage first builds leakage-controlled out-of-fold direct prediction signals from the training set and held-out prediction signals for the test set.
+
 The expected held-out metrics for RAC-Friction reported in the paper are:
 
 | Method | MAE | RMSE | R2 | Accuracy | Macro-F1 |

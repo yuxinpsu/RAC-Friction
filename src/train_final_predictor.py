@@ -3,6 +3,7 @@ from pathlib import Path
 
 import numpy as np
 from catboost import CatBoostClassifier, CatBoostRegressor
+from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -26,6 +27,7 @@ OUT = METRIC_DIR / "rerank_contextual_results.json"
 FINAL_DIR.mkdir(parents=True, exist_ok=True)
 METRIC_DIR.mkdir(parents=True, exist_ok=True)
 PRED_DIR.mkdir(parents=True, exist_ok=True)
+SIGNALS.parent.mkdir(parents=True, exist_ok=True)
 
 
 def reg_metrics(y, p):
@@ -62,9 +64,77 @@ def reason_predictive_block(reason_features):
     ).astype(np.float32)
 
 
+def fit_predictive_signals(x_train, y_train, z_train, x_test):
+    """Generate leakage-controlled direct prediction signals.
+
+    The final RAC head uses a direct-prediction branch together with analog
+    evidence. For training rows, this branch must be out-of-fold so that the
+    final head does not see in-sample predictions of its own target.
+    """
+    if SIGNALS.exists():
+        return np.load(SIGNALS)
+
+    print(f"\n--- building predictive OOF signals: {SIGNALS} ---", flush=True)
+    n_classes = 10
+    folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    oof_reg = np.zeros(len(x_train), dtype=np.float32)
+    oof_proba = np.zeros((len(x_train), n_classes), dtype=np.float32)
+    test_reg_folds = []
+    test_proba_folds = []
+
+    for fold, (tr_idx, va_idx) in enumerate(folds.split(x_train, z_train), start=1):
+        print(f"predictive signal fold {fold}/5", flush=True)
+        reg = CatBoostRegressor(
+            loss_function="RMSE",
+            iterations=3000,
+            depth=8,
+            learning_rate=0.018,
+            l2_leaf_reg=8.0,
+            random_seed=4200 + fold,
+            verbose=600,
+            allow_writing_files=False,
+            task_type="GPU",
+            devices="0",
+        )
+        reg.fit(x_train[tr_idx], y_train[tr_idx])
+        oof_reg[va_idx] = reg.predict(x_train[va_idx]).astype(np.float32)
+        test_reg_folds.append(reg.predict(x_test).astype(np.float32))
+
+        counts = np.bincount(z_train[tr_idx], minlength=n_classes).astype(float)
+        weights = 1.0 / np.sqrt(np.maximum(counts, 1.0))
+        weights = (weights / weights.mean()).tolist()
+        cls = CatBoostClassifier(
+            loss_function="MultiClass",
+            iterations=1200,
+            depth=8,
+            learning_rate=0.030,
+            l2_leaf_reg=5.0,
+            class_weights=weights,
+            random_seed=8400 + fold,
+            verbose=300,
+            allow_writing_files=False,
+            task_type="GPU",
+            devices="0",
+        )
+        cls.fit(x_train[tr_idx], z_train[tr_idx])
+        oof_proba[va_idx] = cls.predict_proba(x_train[va_idx]).astype(np.float32)
+        test_proba_folds.append(cls.predict_proba(x_test).astype(np.float32))
+
+    test_reg = np.mean(np.vstack(test_reg_folds), axis=0).astype(np.float32)
+    test_proba = np.mean(np.stack(test_proba_folds, axis=0), axis=0).astype(np.float32)
+    np.savez_compressed(
+        SIGNALS,
+        oof_reg=oof_reg,
+        test_reg=test_reg,
+        oof_proba=oof_proba,
+        test_proba=test_proba,
+    )
+    print(f"saved predictive OOF signals: {SIGNALS}", flush=True)
+    return np.load(SIGNALS)
+
+
 def load_features():
     base = np.load(BASE)
-    sig = np.load(SIGNALS)
     analog = np.load(ANALOG)
     reason = np.load(REASON)
 
@@ -74,6 +144,7 @@ def load_features():
     y_test = base["y_test"].astype(np.float32)
     z_train = base["z_train"].astype(int)
     z_test = base["z_test"].astype(int)
+    sig = fit_predictive_signals(x_train, y_train, z_train, x_test)
 
     train_analog = analog["train_analog"].astype(np.float32)
     test_analog = analog["test_analog"].astype(np.float32)

@@ -84,6 +84,8 @@ data/train.csv
 data/test.csv
 ```
 
+By default, the pipeline reads data from the repository-local `data/` directory. To use another data location, set `RAC_FRICTION_DATA_DIR=/path/to/Data` before running the pipeline.
+
 Segment and sub-segment identifiers are excluded from predictors by the feature preparation script.
 
 ## Environment

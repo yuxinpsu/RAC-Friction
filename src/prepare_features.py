@@ -1,5 +1,6 @@
 import json
 import math
+import os
 import re
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = PROJECT_ROOT.parent / "Data"
+DATA_DIR = Path(os.environ.get("RAC_FRICTION_DATA_DIR", PROJECT_ROOT / "data")).resolve()
 OUT = PROJECT_ROOT / "output" / "features"
 OUT.mkdir(parents=True, exist_ok=True)
 

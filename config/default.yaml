@@ -3,7 +3,7 @@ project:
   description: Retrieval-augmented correction for network-level road surface friction prediction from sparse mobile sensing records.
 
 paths:
-  data_dir: ../Data
+  data_dir: data
   output_dir: output
   checkpoint_dir: ckpt
 

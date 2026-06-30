@@ -40,6 +40,41 @@ The main RAC-Friction pipeline produces:
 
 The historical `rag_friction_*` filenames are retained for compatibility with the current scripts, but they correspond to the RAC-Friction model described in the paper.
 
+## Validation and Paper Metrics
+
+After the full pipeline finishes, the final paper-table metrics are written by the `predictor` stage:
+
+```bash
+python script/run_rac_friction.py --stage predictor
+```
+
+This stage evaluates the held-out test set and saves the main results to:
+
+```text
+output/metrics/rerank_contextual_results.json
+```
+
+The expected held-out metrics for RAC-Friction reported in the paper are:
+
+| Method | MAE | RMSE | R2 | Accuracy | Macro-F1 |
+|---|---:|---:|---:|---:|---:|
+| RAC-Friction | 0.0991 | 0.1471 | 0.6245 | 0.5775 | 0.5892 |
+
+These values are computed from the final RAC-Friction regression and classification heads using the held-out test set.
+
+Reliability validation is produced by the `uncertainty` stage:
+
+```bash
+python script/run_rac_friction.py --stage uncertainty
+```
+
+It writes:
+
+```text
+output/metrics/reasoning_uncertainty_validation.json
+output/figures/reasoning_uncertainty_validation.pdf
+```
+
 ## Data Policy
 
 The original friction archive is not included in this repository. Place the cleaned files as:

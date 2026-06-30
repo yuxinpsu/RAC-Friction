@@ -1,0 +1,49 @@
+# Data
+data/*.csv
+data/*.parquet
+data/*.feather
+data/*.pkl
+data/*.npz
+
+# Model artifacts
+ckpt/**/*.pt
+ckpt/**/*.pth
+ckpt/**/*.pkl
+ckpt/**/*.cbm
+ckpt/**/*.joblib
+ckpt/**/*.npz
+ckpt/**/*.npy
+ckpt/**/*.json
+
+# Outputs
+output/**/*.npz
+output/**/*.npy
+output/**/*.json
+output/**/*.csv
+output/**/*.pkl
+output/**/*.png
+output/**/*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# Logs
+logs/
+*.log
+*.pid
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

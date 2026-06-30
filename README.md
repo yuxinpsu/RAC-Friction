@@ -1,0 +1,68 @@
+# RAC-Friction
+
+Retrieval-Augmented Correction for network-level road surface friction prediction from sparse mobile sensing records.
+
+RAC-Friction treats a target road condition as a query and uses a historical friction archive as analog evidence. The model first retrieves candidate historical analogs, then reranks and corrects the retrieved evidence before making continuous friction and friction-risk predictions.
+
+## Repository Layout
+
+```text
+RAC-Friction/
+  config/                  Experiment configuration.
+  data/                    Place train.csv and test.csv here. Data are not tracked.
+  src/                     Core reusable modules.
+  script/                  Single command-line entry point.
+  ckpt/                    Model checkpoints and retrieval artifacts. Not tracked.
+  output/                  Metrics, predictions, and figures. Not tracked.
+  docs/                    Reproducibility notes and artifact manifest.
+```
+
+## Main Pipeline
+
+Run the full model pipeline from the repository root:
+
+```bash
+python script/run_rac_friction.py --stage all
+```
+
+Individual stages can also be run with `--stage prepare`, `--stage retrieval`, `--stage reasoner`, `--stage predictor`, or `--stage uncertainty`.
+
+The main RAC-Friction pipeline produces:
+
+- `output/features/embedding_rag_features.npz`
+- `ckpt/encoder/contrastive64_embeddings.npz`
+- `ckpt/retrieval/raw_plus_contrastive64_c65536_analog.npz`
+- `ckpt/retrieval/cross_encoder_reranked_analog.npz`
+- `ckpt/reasoner/contextual_reasoner_heteroscedastic.pt`
+- `ckpt/reasoner/reasoned_memory_features_rerank_contextual.npz`
+- `ckpt/final/rag_friction_rerank_contextual_rmse_regressor.cbm`
+- `ckpt/final/rag_friction_rerank_contextual_classifier.cbm`
+
+The historical `rag_friction_*` filenames are retained for compatibility with the current scripts, but they correspond to the RAC-Friction model described in the paper.
+
+## Data Policy
+
+The original friction archive is not included in this repository. Place the cleaned files as:
+
+```text
+data/train.csv
+data/test.csv
+```
+
+Segment and sub-segment identifiers are excluded from predictors by the feature preparation script.
+
+## Environment
+
+The code was developed with Python 3.10. Core dependencies include PyTorch, NumPy, pandas, scikit-learn, CatBoost, and Matplotlib.
+
+Install the base dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+See `docs/reproducibility.md` for the expected execution order and artifact policy.
+
+## Reproducibility
+
+All reported tables and figures should be generated from files under `output/metrics`, `output/predictions`, and `output/figures`. Large artifacts are intentionally ignored by Git; use `docs/artifact_manifest.md` to track which generated files correspond to each paper result.

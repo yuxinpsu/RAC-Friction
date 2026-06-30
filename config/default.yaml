@@ -1,0 +1,47 @@
+project:
+  name: RAC-Friction
+  description: Retrieval-augmented correction for network-level road surface friction prediction from sparse mobile sensing records.
+
+paths:
+  data_dir: ../Data
+  output_dir: output
+  checkpoint_dir: ckpt
+
+data:
+  train_file: train.csv
+  test_file: test.csv
+  target: friction
+  excluded_identifiers:
+    - seg_id
+    - sub_id
+
+retrieval:
+  k_neighbors: 32
+  rerank_candidates: 128
+  candidate_pool: 65536
+  n_clusters: 1024
+  raw_weight: 0.65
+  contrastive_embedding_weight: 0.35
+
+contrastive_encoder:
+  embedding_dim: 64
+  epochs: 8
+  batch_size: 2048
+  temperature: 0.12
+  regression_weight: 1.0
+  classification_weight: 0.45
+  contrastive_weight: 0.18
+
+transition_reasoner:
+  epochs: 5
+  batch_size: 768
+  attention_similarity_prior: 1.85
+  context_layers: 2
+  attention_heads: 4
+  heteroscedastic_transition_loss_weight: 0.08
+  uncertainty_used_by_final_predictor: false
+
+final_predictor:
+  regression_loss: RMSE
+  classification_loss: MultiClass
+  random_seed: 42

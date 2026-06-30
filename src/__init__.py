@@ -1,0 +1,1 @@
+"""RAG-Friction model package."""
